@@ -1,0 +1,21 @@
+name: Daily meme coin alert
+
+on:
+  schedule:
+    # 14:00 UTC = 9:00 AM US Central during daylight time, 8:00 AM after Nov 1
+    - cron: "0 14 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  alert:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Send alert
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: python3 alert.py
